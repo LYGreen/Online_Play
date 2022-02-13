@@ -84,9 +84,9 @@ namespace NetWork_006
                 case'2':
                     {
                         //Host
-                        Console.WriteLine("请输入ip:");
+                        Console.WriteLine("请输入服务器ip:");
                         ip = Console.ReadLine();
-                        Console.WriteLine("请输入端口:");
+                        Console.WriteLine("请输入服务器端口:");
                         port = Convert.ToInt32(Console.ReadLine());
                         Console.WriteLine("请输入监听端口:");
                         Host_ListenPort = Convert.ToInt32(Console.ReadLine());
@@ -109,20 +109,12 @@ namespace NetWork_006
                 case'3':
                     {
                         //Join
-                        Console.WriteLine("请输入ip");
+                        Console.WriteLine("请输入服务器ip");
                         ip = Console.ReadLine();
-                        Console.WriteLine("请输入端口:");
+                        Console.WriteLine("请输入服务器端口:");
                         port = Convert.ToInt32(Console.ReadLine());
                         Console.WriteLine("请输入转发端口:");
                         Join_MappedPort = Convert.ToInt32(Console.ReadLine());
-
-                        //Join_ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        //IPEndPoint Join_ServerEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-                        //Console.WriteLine("正在连接服务器......");
-                        //Join_ServerSocket.Connect(Join_ServerEndPoint);
-                        //Join_ServerSocket.Send(Encoding.Unicode.GetBytes("MESSAGE_JOIN_LYGREEN"));
-                        //Console.WriteLine("连接成功！");
-
 
                         Thread Thread_LocalListen = new Thread(new ThreadStart(Join_LocalListen));
                         Thread_LocalListen.Name = "Join_LocalListen";
@@ -172,13 +164,6 @@ namespace NetWork_006
                                     Server_ListHostSockets.Add(ClientSocket);
                                     Console.WriteLine("Message:已接受主机端 " + ClientSocket.RemoteEndPoint + " 的连接！");
 
-                                    //*
-                                    //Thread Thread_ReceiveFromClientAndSendToHost = new Thread(new ThreadStart(Server_ReceiveFromHostAndSendToClient));
-                                    //Thread_ReceiveFromClientAndSendToHost.Name = "Server_ReceiveFromHostAndSendToClient";
-                                    //Thread_ReceiveFromClientAndSendToHost.IsBackground = true;
-                                    //Thread_ReceiveFromClientAndSendToHost.Start();
-                                    //*
-
                                     Server_Sockets ThreadSocket = new Server_Sockets();
                                     if (Server_ListClientSockets.Count > 0)
                                     {
@@ -213,10 +198,6 @@ namespace NetWork_006
                                     Thread_Client_Work.IsBackground = true;
                                     Thread_Client_Work.Start(ClientSocket);
 
-                                    //Thread Thread_ReceiveFromClientAndSendToHost = new Thread(new ThreadStart(Server_ReceiveFromClientAndSendToHost));
-                                    //Thread_ReceiveFromClientAndSendToHost.Name = "Server_ReceiveFromClientAndSendToHost";
-                                    //Thread_ReceiveFromClientAndSendToHost.IsBackground = true;
-                                    //Thread_ReceiveFromClientAndSendToHost.Start();
                                     FirstData = new byte[] { };
                                     BreakOut = true;
                                     break;
@@ -239,48 +220,6 @@ namespace NetWork_006
         }
         static void Server_ReceiveFromClientAndSendToHost(object obj)
         {
-            //*
-            //Server_HostCommunicationSocket.Send(Encoding.Unicode.GetBytes("MESSAGE_HOST_CREATESOCKET_LYGREEN"));
-            //*
-            //byte[] FirstData = {};
-            //String FirstStr = "\0";
-            //for(int i = 0;i < 4;i++)
-            //{
-            //    byte[] DataBuffer = new byte[2048];
-            //    int size = Server_HostCommunicationSocket.Receive(DataBuffer);
-            //    Console.WriteLine("Message:已接收自 " + Server_HostCommunicationSocket.RemoteEndPoint + " "+size +" B数据");
-            //    FirstData = byte_Combine(FirstData, DataBuffer.Take(size).ToArray());
-            //    FirstStr = Encoding.Unicode.GetString(FirstData);
-            //    if (FirstStr == "MESSAGE_HOST_CREATESOCKET_SUCCESSFULLY_LYGREEN")
-            //    {
-            //        break;
-            //    }
-            //    Thread.Sleep(250);
-            //}
-            //if (FirstStr == "MESSAGE_HOST_CREATESOCKET_SUCCESSFULLY_LYGREEN")
-            //{
-            //*
-                //while(true)
-                //{
-                //    Thread.Sleep(50);
-                //    if (Server_ListHostSockets.Count == Server_ListClientSockets.Count)
-                //    {
-
-                //        break;
-                //    }
-                //}
-                //Server_Sockets ThreadSocket;
-                //ThreadSocket.HostSocket = Server_ListHostSockets[Server_ListHostSockets.Count - 1];
-                //ThreadSocket.ClientSocket = Server_ListClientSockets[Server_ListClientSockets.Count - 1]; 
-                
-
-                //*
-                //Thread Thread_ReceiveFromHostAndSendToClient = new Thread(new ParameterizedThreadStart(Server_ReceiveFromHostAndSendToClient));
-                //Thread_ReceiveFromHostAndSendToClient.Name = "Server_ReceiveFromHostAndSendToClient";
-                //Thread_ReceiveFromHostAndSendToClient.IsBackground = true;
-                //Thread_ReceiveFromHostAndSendToClient.Start(ThreadSocket);
-                //*
-
             Server_Sockets ThreadSocket = (Server_Sockets)obj;
 
             try
@@ -300,54 +239,13 @@ namespace NetWork_006
             }
             catch (Exception e)
             {
-                //ThreadSocket.HostSocket.Close();
                 Console.WriteLine("Error:" + e.Message);
             }
             //*
             //}
         }
-        //static void Server_ReceiveFromHostAndSendToClient(object obj)
-        //{
-        //    Server_Sockets ThreadSocket = (Server_Sockets)obj;
-        //    int count = Server_ListHostSockets.Count;
-        //    try
-        //    {
-        //        while(true)
-        //        {
-        //            byte[] data = new byte[2048];
-        //            int size = ThreadSocket.HostSocket.Receive(data);
-        //            Console.WriteLine("Message:已接收自 " + ThreadSocket.HostSocket.RemoteEndPoint + " " + size + " B数据");
-        //            ThreadSocket.ClientSocket.Send(data.Take(size).ToArray());
-        //            Console.WriteLine("Message:已发送至 " + ThreadSocket.ClientSocket.RemoteEndPoint + " " + size + " B数据");
-        //            if(size == 0)
-        //            {
-        //                //Console.WriteLine("已断开......");
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        ThreadSocket.ClientSocket.Close();
-        //        Console.WriteLine("Error:" + e.Message);
-        //    }
-        //}
-
         static void Server_ReceiveFromHostAndSendToClient(object obj)
         {
-            //while (true)
-            //{
-            //    Thread.Sleep(50);
-            //    if (Server_ListHostSockets.Count == Server_ListClientSockets.Count)
-            //    {
-
-            //        break;
-            //    }
-            //}
-            //Server_Sockets ThreadSocket;
-            //ThreadSocket.HostSocket = Server_ListHostSockets[Server_ListHostSockets.Count - 1];
-            //ThreadSocket.ClientSocket = Server_ListClientSockets[Server_ListClientSockets.Count - 1];
-
             Server_Sockets ThreadSocket = (Server_Sockets)obj;
 
             try
@@ -410,14 +308,6 @@ namespace NetWork_006
                                 Thread_ReceiveFromLocalAndSendToServer.Name = "Host_ReceiveFromLocalAndSendToServer";
                                 Thread_ReceiveFromLocalAndSendToServer.IsBackground = true;
 
-                                //Thread Thread_Connect = new Thread(new ParameterizedThreadStart(Host_Connect));
-                                //Thread_Connect.Name = "Host_Connect";
-                                //Thread_Connect.IsBackground = true;
-                                //ThreadObjects to;
-                                //to.t1 = Thread_ReceiveFromServerAndSendToLocal;
-                                //to.t2 = Thread_ReceiveFromLocalAndSendToServer;
-                                //to.hs = ThreadSocket;
-
                                 Thread_ReceiveFromServerAndSendToLocal.Start(ThreadSocket);
                                 Thread_ReceiveFromLocalAndSendToServer.Start(ThreadSocket);
                                 //Thread_Connect.Start((object)to);
@@ -441,44 +331,6 @@ namespace NetWork_006
             public Thread t2;
             public Host_Sockets hs;
         }
-        //static void Host_Connect(object obj)
-        //{
-        //    Thread Thread_ReceiveFromServerAndSendToLocal = ((ThreadObjects)obj).t1;
-        //    Thread Thread_ReceiveFromLocalAndSendToServer = ((ThreadObjects)obj).t2;
-        //    Host_Sockets ThreadSocket = ((ThreadObjects)obj).hs;
-        //    while(true)
-        //    {
-        //        Thread.Sleep(25);
-        //        if((Thread_ReceiveFromServerAndSendToLocal.IsAlive) && (!Thread_ReceiveFromLocalAndSendToServer.IsAlive))
-        //        {
-        //            Thread_ReceiveFromServerAndSendToLocal.Abort();
-        //        }
-        //        Thread.Sleep(25);
-        //        if ((!Thread_ReceiveFromServerAndSendToLocal.IsAlive) && (!Thread_ReceiveFromLocalAndSendToServer.IsAlive))
-        //        {
-        //            Host_ListLocalSockets[Host_ListLocalSockets.IndexOf(ThreadSocket.LocalSocket)].Close();
-        //            Console.WriteLine("已断开！");
-        //            Console.WriteLine("正在重新连接......");
-        //            int pos = Host_ListLocalSockets.IndexOf(ThreadSocket.LocalSocket);
-        //            Host_ListLocalSockets[pos] = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        //            IPEndPoint LocalEndPoint = new IPEndPoint(IPAddress.Parse(Dns.GetHostAddresses(Dns.GetHostName()).Where(i => i.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault().ToString()), Host_ListenPort);
-        //            Host_ListLocalSockets[pos].Connect(LocalEndPoint);
-        //            Console.WriteLine("连接成功！");
-        //            ThreadSocket.LocalSocket = Host_ListLocalSockets[pos];
-
-        //            Thread_ReceiveFromServerAndSendToLocal = new Thread(new ParameterizedThreadStart(Host_ReceiveFromServerAndSendToLocal));
-        //            Thread_ReceiveFromServerAndSendToLocal.Name = "Host_ReceiveFromServerAndSendToLocal";
-        //            Thread_ReceiveFromServerAndSendToLocal.IsBackground = true;
-
-        //            Thread_ReceiveFromLocalAndSendToServer = new Thread(new ParameterizedThreadStart(Host_ReceiveFromLocalAndSendToServer));
-        //            Thread_ReceiveFromLocalAndSendToServer.Name = "Host_ReceiveFromLocalAndSendToServer";
-        //            Thread_ReceiveFromLocalAndSendToServer.IsBackground = true;
-
-        //            Thread_ReceiveFromServerAndSendToLocal.Start(ThreadSocket);
-        //            Thread_ReceiveFromLocalAndSendToServer.Start(ThreadSocket);
-        //        }
-        //    }
-        //}
         static void Host_ReceiveFromServerAndSendToLocal(object obj)
         {
             Host_Sockets ThreadSocket = (Host_Sockets)obj;
