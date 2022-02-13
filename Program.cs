@@ -189,10 +189,10 @@ namespace NetWork_006
                                 }
                             case"MESSAGE_JOIN_LYGREEN":
                                 {
-                                    //ClientSocket.Send(Encoding.Unicode.GetBytes("MESSAGE_JOIN_SUCCESSFULLY_LYGREEN"));
                                     Console.WriteLine("Message:已接受加入端 " + ClientSocket.RemoteEndPoint + " 的连接！");
                                     Server_ListClientSockets.Add(ClientSocket);
 
+                                    //创建一个线程防止Server_Listen()线程被阻塞
                                     Thread Thread_Client_Work = new Thread(new ParameterizedThreadStart(Server_Thread_Client_Work));
                                     Thread_Client_Work.Name = "Server_Thread_Client_Work00";
                                     Thread_Client_Work.IsBackground = true;
@@ -241,8 +241,6 @@ namespace NetWork_006
             {
                 Console.WriteLine("Error:" + e.Message);
             }
-            //*
-            //}
         }
         static void Server_ReceiveFromHostAndSendToClient(object obj)
         {
